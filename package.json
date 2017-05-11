@@ -1,22 +1,22 @@
 {
-  "name": "node-sass-json-importer",
-  "version": "3.0.2",
-  "description": "Allows importing json in sass files parsed by node-sass.",
-  "main": "dist/node-sass-json-importer.js",
+  "name": "node-sass-yaml-importer",
+  "version": "0.1.0",
+  "description": "Allows importing YAML in sass files parsed by node-sass.",
+  "main": "dist/node-sass-yaml-importer.js",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Updater/node-sass-json-importer.git"
+    "url": "https://github.com/Loilo/node-sass-yaml-importer.git"
   },
   "keywords": [
     "sass",
     "node-sass",
     "importer",
-    "json"
+    "yaml"
   ],
   "scripts": {
     "test": "mocha --compilers js:babel/register",
-    "compile": "mkdirp dist && babel -o dist/node-sass-json-importer.js src/index.js",
+    "compile": "mkdirp dist && babel -o dist/node-sass-yaml-importer.js src/index.js",
     "prepublish": "npm run compile"
   },
   "peerDependencies": {
@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "is-there": "^4.0.0",
+    "js-yaml": "^3.8.4",
     "lodash": "^3.10.1"
   },
   "devDependencies": {
