@@ -1,6 +1,6 @@
 {
   "name": "node-sass-yaml-importer",
-  "version": "0.2.0",
+  "version": "3.0.2",
   "description": "Allows importing YAML in sass files parsed by node-sass.",
   "main": "dist/node-sass-yaml-importer.js",
   "license": "MIT",
