@@ -1,5 +1,7 @@
 # node-sass-yaml-importer
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Loilo/node-sass-yaml-importer.svg)](https://greenkeeper.io/)
+
 YAML importer for [node-sass](https://github.com/sass/node-sass). Allows `@import`ing `.yml` files in Sass files parsed by `node-sass`.
 
 This is a fork of the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) repository, adjusted for usage with YAML.
