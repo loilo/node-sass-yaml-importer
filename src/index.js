@@ -1,8 +1,7 @@
-import _               from 'lodash';
-import fs              from 'fs';
+import isPlainObject from 'is-plain-object';
+import { readFileSync, existsSync } from 'fs';
+import path, { resolve } from 'path';
 import yaml            from 'js-yaml';
-import path, {resolve} from 'path';
-import isThere         from 'is-there';
 
 export default function(url, prev) {
   if (!isYAMLfile(url)) {
@@ -16,7 +15,7 @@ export default function(url, prev) {
 
   let file = paths
     .map(path => resolve(path, url))
-    .filter(isThere)
+    .filter(existsSync)
     .pop();
 
   if (!file) {
@@ -25,7 +24,7 @@ export default function(url, prev) {
 
   try {
     return {
-      contents: transformJSONtoSass(yaml.safeLoad(fs.readFileSync(require.resolve(file), 'utf8')))
+      contents: transformJSONtoSass(yaml.safeLoad(readFileSync(require.resolve(file), 'utf8')))
     };
   } catch(e) {
     return new Error(`node-sass-yaml-importer: Error transforming YAML to SASS. Check if your YAML parses correctly. ${e}`);
@@ -44,9 +43,9 @@ export function transformJSONtoSass(json) {
 }
 
 export function parseValue(value) {
-  if (_.isArray(value)) {
+  if (Array.isArray(value)) {
     return parseList(value);
-  } else if (_.isPlainObject(value)) {
+  } else if (isPlainObject(value)) {
     return parseMap(value);
   } else {
     return value;
