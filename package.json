@@ -15,23 +15,31 @@
     "yaml"
   ],
   "scripts": {
-    "test": "mocha --compilers js:babel/register",
     "compile": "mkdirp dist && babel -o dist/node-sass-yaml-importer.js src/index.js",
-    "prepublish": "npm run compile"
+    "prepublishOnly": "npm run compile",
+    "pretest": "npm run compile",
+    "test": "mocha"
   },
+  "files": [
+    "dist"
+  ],
   "peerDependencies": {
     "node-sass": ">=3.5.3"
   },
   "dependencies": {
-    "is-there": "^4.0.0",
-    "js-yaml": "^3.8.4",
-    "lodash": "^3.10.1"
+    "is-plain-object": "^2.0.4",
+    "js-yaml": "^3.8.4"
   },
   "devDependencies": {
-    "babel": "^5.8.23",
-    "chai": "^3.2.0",
+    "@babel/cli": "^7.0.0",
+    "@babel/core": "^7.0.0",
+    "@babel/preset-env": "^7.0.0",
+    "chai": "^4.1.2",
     "mkdirp": "^0.5.1",
-    "mocha": "^2.3.2",
+    "mocha": "^5.2.0",
     "node-sass": ">=3.5.3"
+  },
+  "engines": {
+    "node": ">=6.0.0"
   }
 }

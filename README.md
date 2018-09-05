@@ -60,7 +60,7 @@ export default {
 };
 ```
 
-#### Webpack v2
+#### Webpack v2 and upwards
 
 ```javascript
 import yamlImporter from 'node-sass-yaml-importer';
