@@ -2,29 +2,26 @@
   "name": "node-sass-yaml-importer",
   "version": "3.0.2",
   "description": "Allows importing YAML in sass files parsed by node-sass.",
-  "main": "dist/node-sass-yaml-importer.js",
-  "license": "MIT",
+  "keywords": [
+    "importer",
+    "node-sass",
+    "sass",
+    "yaml"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/Loilo/node-sass-yaml-importer.git"
   },
-  "keywords": [
-    "sass",
-    "node-sass",
-    "importer",
-    "yaml"
+  "license": "MIT",
+  "files": [
+    "dist"
   ],
+  "main": "dist/node-sass-yaml-importer.js",
   "scripts": {
     "compile": "mkdirp dist && babel -o dist/node-sass-yaml-importer.js src/index.js",
     "prepublishOnly": "npm run compile",
     "pretest": "npm run compile",
     "test": "mocha"
-  },
-  "files": [
-    "dist"
-  ],
-  "peerDependencies": {
-    "node-sass": ">=3.5.3"
   },
   "dependencies": {
     "is-plain-object": "^2.0.4",
@@ -37,6 +34,9 @@
     "chai": "^4.1.2",
     "mkdirp": "^0.5.1",
     "mocha": "^5.2.0",
+    "node-sass": ">=3.5.3"
+  },
+  "peerDependencies": {
     "node-sass": ">=3.5.3"
   },
   "engines": {
