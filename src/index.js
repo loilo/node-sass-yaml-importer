@@ -1,6 +1,6 @@
 import isPlainObject from 'is-plain-object';
 import { readFileSync, existsSync } from 'fs';
-import path, { resolve } from 'path';
+import path, { resolve, dirname } from 'path';
 import yaml            from 'js-yaml';
 
 export default function(url, prev) {
@@ -10,7 +10,7 @@ export default function(url, prev) {
 
   let includePaths = this.options.includePaths ? this.options.includePaths.split(path.delimiter) : [];
   let paths = []
-    .concat(prev.slice(0, prev.lastIndexOf('/')))
+    .concat(dirname(prev))
     .concat(includePaths);
 
   let file = paths
