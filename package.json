@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "is-plain-object": "^2.0.4",
-    "js-yaml": "^3.8.4"
+    "js-yaml": "^4.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",
