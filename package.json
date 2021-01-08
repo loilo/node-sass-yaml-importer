@@ -10,7 +10,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Loilo/node-sass-yaml-importer.git"
+    "url": "https://github.com/loilo/node-sass-yaml-importer.git"
   },
   "license": "MIT",
   "files": [
