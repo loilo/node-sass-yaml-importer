@@ -4,8 +4,8 @@ YAML importer for [node-sass](https://github.com/sass/node-sass). Allows `@impor
 
 This is a fork of the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) repository, adjusted for usage with YAML.
 
-[![npm](https://img.shields.io/npm/v/node-sass-yaml-importer.svg)](https://www.npmjs.com/package/node-sass-yaml-importer)
-[![build status](https://travis-ci.org/Loilo/node-sass-yaml-importer.svg?branch=master)](https://travis-ci.org/Loilo/node-sass-yaml-importer)
+[![Tests](https://badgen.net/github/checks/loilo/node-sass-yaml-importer/master)](https://github.com/loilo/node-sass-yaml-importer/actions)
+[![Version on npm](https://badgen.net/npm/v/node-sass-yaml-importer)](https://www.npmjs.com/package/node-sass-yaml-importer)
 
 ## Usage
 ### [node-sass](https://github.com/sass/node-sass)
