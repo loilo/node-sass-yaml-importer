@@ -54,14 +54,14 @@ export function parseValue(value) {
 
 export function parseList(list) {
   return `(${list
-    .map(value => parseValue(value))
-    .join(',')})`;
+    .map(value => `${parseValue(value)},`)
+    .join('')})`;
 }
 
 export function parseMap(map) {
   return `(${Object.keys(map)
-    .map(key => `${key}: ${parseValue(map[key])}`)
-    .join(',')})`;
+    .map(key => `${key}: ${parseValue(map[key])},`)
+    .join('')})`;
 }
 
 // Super-hacky: Override Babel's transpiled export to provide both
