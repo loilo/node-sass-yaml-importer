@@ -4,7 +4,7 @@ import path, { resolve, dirname } from 'path'
 import yaml from 'js-yaml'
 
 export default function (url, prev) {
-  if (!isYAMLfile(url)) {
+  if (!isValidDataFile(url)) {
     return null
   }
 
@@ -39,8 +39,8 @@ export default function (url, prev) {
   }
 }
 
-export function isYAMLfile(url) {
-  return /\.ya?ml$/.test(url)
+export function isValidDataFile(url) {
+  return /\.(ya?ml|json)$/.test(url)
 }
 
 export function transformJSONtoSass(json) {

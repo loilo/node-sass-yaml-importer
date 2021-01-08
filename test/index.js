@@ -1,6 +1,6 @@
 /* eslint-env jest */
 const yamlImporter = require('../dist/node-sass-yaml-importer')
-const { isYAMLfile } = yamlImporter
+const { isValidDataFile } = yamlImporter
 const sass = require('sass')
 const { resolve } = require('path')
 
@@ -10,6 +10,15 @@ describe('Import type test', function () {
   it('imports strings', function () {
     let result = sass.renderSync({
       file: './test/fixtures/strings/style.scss',
+      importer: yamlImporter
+    })
+
+    expect(result.css.toString()).toBe(EXPECTATION)
+  })
+
+  it('imports JSON files', function () {
+    let result = sass.renderSync({
+      file: './test/fixtures/json/style.scss',
       importer: yamlImporter
     })
 
@@ -76,9 +85,9 @@ describe('Import type test', function () {
     )
   })
 
-  it('ignores non-json imports', function () {
+  it('ignores non-yaml imports', function () {
     let result = sass.renderSync({
-      file: './test/fixtures/non-json/style.scss',
+      file: './test/fixtures/non-yaml/style.scss',
       importer: yamlImporter
     })
 
@@ -97,7 +106,7 @@ describe('Import type test', function () {
 
   // TODO: Added to verify named exports + CommonJS default export hack (see index.js).
   it('provides named exports of internal methods', function () {
-    expect(isYAMLfile('import.yml')).toBe(true)
-    expect(isYAMLfile('import.yaml')).toBe(true)
+    expect(isValidDataFile('import.yml')).toBe(true)
+    expect(isValidDataFile('import.yaml')).toBe(true)
   })
 })
