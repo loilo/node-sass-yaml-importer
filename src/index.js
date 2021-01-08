@@ -24,7 +24,7 @@ export default function(url, prev) {
 
   try {
     return {
-      contents: transformJSONtoSass(yaml.safeLoad(readFileSync(require.resolve(file), 'utf8')))
+      contents: transformJSONtoSass(yaml.load(readFileSync(require.resolve(file), 'utf8')))
     };
   } catch(e) {
     return new Error(`node-sass-yaml-importer: Error transforming YAML to SASS. Check if your YAML parses correctly. ${e}`);
