@@ -21,7 +21,7 @@
     "compile": "mkdirp dist && babel -o dist/node-sass-yaml-importer.js src/index.js",
     "prepublishOnly": "npm run compile",
     "pretest": "npm run compile",
-    "test": "mocha"
+    "test": "jest"
   },
   "dependencies": {
     "is-plain-object": "^2.0.4",
@@ -31,13 +31,10 @@
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
-    "chai": "^4.1.2",
+    "@types/jest": "^26.0.20",
+    "jest": "^26.6.3",
     "mkdirp": "^0.5.1",
-    "mocha": "^5.2.0",
-    "node-sass": ">=3.5.3"
-  },
-  "peerDependencies": {
-    "node-sass": ">=3.5.3"
+    "sass": "^1.32.2"
   },
   "engines": {
     "node": ">=10.0.0"
