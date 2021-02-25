@@ -65,7 +65,7 @@ export function parseList(list) {
 
 export function parseMap(map) {
   return `(${Object.keys(map)
-    .map(key => `${key}: ${parseValue(map[key])},`)
+    .map(key => `'${key.replace(/'/g, "\\'")}': ${parseValue(map[key])},`)
     .join('')})`
 }
 

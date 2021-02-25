@@ -115,6 +115,28 @@ See discussion here for more:
 
 https://github.com/Updater/node-sass-json-importer/pull/5
 
+## Importing objects
+
+Since version 6 of this package, _all_ map keys are quoted:
+
+```yaml
+# colors.yml
+colors:
+  red: '#f00'
+```
+
+```scss
+@import 'colors.yml';
+
+:root {
+  // This no longer works:
+  color: map-get($colors, red);
+
+  // Do this instead:
+  color: map-get($colors, 'red');
+}
+```
+
 ## Thanks to
 
 This module is based on the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) repository, they did all the work.

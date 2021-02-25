@@ -43,6 +43,24 @@ describe('Import type test', function () {
     expect(result.css.toString()).toBe(EXPECTATION)
   })
 
+  it('imports maps with single-quoted keys', function () {
+    let result = sass.renderSync({
+      file: './test/fixtures/maps/single-quoted-key/style.scss',
+      importer: yamlImporter
+    })
+
+    expect(result.css.toString()).toBe(EXPECTATION)
+  })
+
+  it('imports maps with double-quoted keys', function () {
+    let result = sass.renderSync({
+      file: './test/fixtures/maps/double-quoted-key/style.scss',
+      importer: yamlImporter
+    })
+
+    expect(result.css.toString()).toBe(EXPECTATION)
+  })
+
   it('finds imports via includePaths', function () {
     let result = sass.renderSync({
       file: './test/fixtures/include-paths/style.scss',
