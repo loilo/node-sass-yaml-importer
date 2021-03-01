@@ -137,6 +137,25 @@ colors:
 }
 ```
 
+## Using @use
+
+The Sass team discourages the continued use of the `@import` rule and istead use `@use`. This allows variables to be scoped to the document. Using `@use` with yaml can be done like so:
+
+```yaml
+# colors.yml
+red: '#f00'
+```
+
+```scss
+@use 'colors.yml' as colors;
+
+.example {
+  background-color: colors.$red;
+}
+```
+
+
+
 ## Thanks to
 
 This module is based on the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) repository, they did all the work.
