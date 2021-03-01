@@ -5,11 +5,11 @@
 
 YAML importer for [sass](https://github.com/sass/sass) (originally for the now deprecated [node-sass](https://github.com/sass/node-sass), hence the package name).
 
-This allows `@import`ing `.yml` files (and `.json` files, since that's a subset of YAML) in Sass files parsed by `sass`.
+This allows `@import`ing/`@use`ing `.yml` files (and `.json` files, since that's a subset of YAML) in Sass files parsed by `sass`.
 
 This is a fork of the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) repository, adjusted for usage with YAML.
 
-## Usage
+## Setup
 
 ### [sass](https://github.com/sass/sass)
 
@@ -89,23 +89,63 @@ export default {
 };
 ```
 
-## Importing strings
+## Usage
+
+Given the following `colors.yml` file:
+```yaml
+primary: blue
+secondary: red
+```
+
+The importer allows your Sass file in the same folder to do this:
+
+```scss
+@import 'colors.yml';
+
+.some-class {
+  background: $primary;
+}
+```
+
+Note that [`@import` is somewhat deprecated](https://sass-lang.com/documentation/at-rules/import) and you should use `@use` instead:
+
+```scss
+@use 'colors.yml';
+
+.some-class {
+  // Data is automatically namespaced:
+  background: colors.$primary;
+}
+```
+
+To achieve the same behavior as with `@import`, you can [change the namespace to `*`](https://sass-lang.com/documentation/at-rules/use#choosing-a-namespace):
+
+```scss
+@use 'colors.yml' as *;
+
+.some-class {
+  // Colors are no longer namespaced:
+  background: $primary;
+}
+```
+
+### Importing strings
 
 Since YAML doesn't map directly to SASS's data types, a common source of confusion is how to handle strings. While [SASS allows strings to be both quoted and unqouted](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#sass-script-strings), strings containing spaces, commas and/or other special characters have to be wrapped in quotes. In terms of YAML, this means the string has to be double quoted:
 
-##### Incorrect
+#### Incorrect
 
 ```yaml
 description: A sentence with spaces.
 ```
 
-##### Also incorrect
+#### Also incorrect
 
 ```yaml
 description: 'A sentence with spaces.'
 ```
 
-##### Correct
+#### Correct
 
 ```yaml
 description: "'A sentence with spaces.'"
@@ -115,7 +155,7 @@ See discussion here for more:
 
 https://github.com/Updater/node-sass-json-importer/pull/5
 
-## Importing objects
+### Importing objects
 
 Since version 6 of this package, _all_ map keys are quoted:
 
@@ -126,7 +166,7 @@ colors:
 ```
 
 ```scss
-@import 'colors.yml';
+@use 'colors.yml' as *;
 
 :root {
   // This no longer works:
