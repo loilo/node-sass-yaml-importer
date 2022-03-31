@@ -1,4 +1,4 @@
-import isPlainObject from 'is-plain-object'
+import { isPlainObject } from 'is-plain-object'
 import { readFileSync, existsSync } from 'fs'
 import path, { resolve, dirname } from 'path'
 import yaml from 'js-yaml'
