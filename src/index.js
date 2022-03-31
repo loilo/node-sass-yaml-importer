@@ -49,13 +49,24 @@ export function transformJSONtoSass(json) {
     .join('\n')
 }
 
+let hexPattern = /^#([0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i
+let unquotedStringPattern = /^(-?([a-z_]|[^ -~])|--)([a-z0-9_-]|[^ -~])*$/i
+let quotedStringPattern = /^("([^"\\]|\\.)*"|'([^'\\]|\\.)*')$/gsu
+
 export function parseValue(value) {
   if (Array.isArray(value)) {
     return parseList(value)
   } else if (isPlainObject(value)) {
     return parseMap(value)
-  } else {
+  } else if (
+    typeof value === 'string' &&
+    (hexPattern.test(value) ||
+      unquotedStringPattern.test(value) ||
+      quotedStringPattern.test(value))
+  ) {
     return value
+  } else {
+    return JSON.stringify(value)
   }
 }
 

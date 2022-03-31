@@ -154,4 +154,18 @@ describe('Import type test', function () {
     expect(isValidDataFile('import.yml')).toBe(true)
     expect(isValidDataFile('import.yaml')).toBe(true)
   })
+
+  it('automatically quotes strings where appropriate', function () {
+    let result = sass.renderSync({
+      file: './test/fixtures/quoting/style.scss',
+      importer: yamlImporter
+    })
+
+    expect(result.css.toString()).toBe(`body {
+  color: red;
+  color: #f00;
+  color: "red";
+  color: "really red";
+}`)
+  })
 })

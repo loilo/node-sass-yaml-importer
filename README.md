@@ -92,6 +92,7 @@ export default {
 ## Usage
 
 Given the following `colors.yml` file:
+
 ```yaml
 primary: blue
 secondary: red
@@ -131,29 +132,17 @@ To achieve the same behavior as with `@import`, you can [change the namespace to
 
 ### Importing strings
 
-Since YAML doesn't map directly to SASS's data types, a common source of confusion is how to handle strings. While [SASS allows strings to be both quoted and unqouted](http://sass-lang.com/documentation/file.SASS_REFERENCE.html#sass-script-strings), strings containing spaces, commas and/or other special characters have to be wrapped in quotes. In terms of YAML, this means the string has to be double quoted:
+As YAML values don't map directly to Sass's data types, a common source of confusion is how to handle strings. While [Sass allows strings to be both quoted and unqouted](https://sass-lang.com/documentation/values/strings#unquoted), strings containing spaces, commas and/or other special characters have to be wrapped in quotes.
 
-#### Incorrect
+Since version 7 of this package, the importer will automatically add quotes around all strings that are not valid unquoted strings or hex colors (and that are not already quoted, of course):
 
-```yaml
-description: A sentence with spaces.
-```
-
-#### Also incorrect
-
-```yaml
-description: 'A sentence with spaces.'
-```
-
-#### Correct
-
-```yaml
-description: "'A sentence with spaces.'"
-```
-
-See discussion here for more:
-
-https://github.com/Updater/node-sass-json-importer/pull/5
+<!-- prettier-ignore -->
+Input | Output | Explanation
+-|-|-
+`color: red`<br>`color: "red"`<br>↑ Equivalent YAML expressions | `$color: red;` | Valid unquoted string
+`color: "#f00"` | `$color: #f00;` | Valid hex color
+`color: "'red'"` | `$color: "red";` | Explicitly quoted string
+`color: "really red"` | `$color: "really red";` | Valid unquoted string
 
 ### Importing objects
 
@@ -177,6 +166,6 @@ colors:
 }
 ```
 
-## Thanks to
+## Credit
 
-This module is based on the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) repository, they did all the work.
+The initial implementation of this importer was based on the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) package.
