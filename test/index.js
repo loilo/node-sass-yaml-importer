@@ -112,6 +112,33 @@ describe('Import type test', function () {
     expect(result.css.toString()).toBe(EXPECTATION)
   })
 
+  it('can utilise @use', function () {
+    let result = sass.renderSync({
+      file: './test/fixtures/use/namespaced/style.scss',
+      importer: yamlImporter
+    })
+
+    expect(result.css.toString()).toBe(EXPECTATION)
+  })
+
+  it('can utilise @use with an alias', function () {
+    let result = sass.renderSync({
+      file: './test/fixtures/use/aliased/style.scss',
+      importer: yamlImporter
+    })
+
+    expect(result.css.toString()).toBe(EXPECTATION)
+  })
+
+  it('can utilise @use without namespace', function () {
+    let result = sass.renderSync({
+      file: './test/fixtures/use/unwrapped/style.scss',
+      importer: yamlImporter
+    })
+
+    expect(result.css.toString()).toBe(EXPECTATION)
+  })
+
   // TODO: Added to verify named exports + CommonJS default export hack (see index.js).
   it('provides the default export when using node require to import', function () {
     let result = sass.renderSync({

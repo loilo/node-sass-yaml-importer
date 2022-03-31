@@ -1,0 +1,5 @@
+@use 'variables.yml';
+
+body {
+  color: variables.$color-red;
+}
