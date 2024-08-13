@@ -1,95 +1,15 @@
 # node-sass-yaml-importer
 
-[![Tests](https://badgen.net/github/checks/loilo/node-sass-yaml-importer/master)](https://github.com/loilo/node-sass-yaml-importer/actions)
-[![Version on npm](https://badgen.net/npm/v/node-sass-yaml-importer)](https://www.npmjs.com/package/node-sass-yaml-importer)
+[![Tests](https://img.shields.io/github/actions/workflow/status/loilo/node-sass-yaml-importer/test.yml?label=tests)](https://github.com/loilo/node-sass-yaml-importer/actions)
+[![Version on npm](https://img.shields.io/npm/v/node-sass-yaml-importer)](https://www.npmjs.com/package/node-sass-yaml-importer)
 
-YAML importer for [sass](https://github.com/sass/sass) (originally for the now deprecated [node-sass](https://github.com/sass/node-sass), hence the package name).
+> Node.js based YAML importer for [Sass](https://sass-lang.com/)
 
-This allows `@import`ing/`@use`ing `.yml` files (and `.json` files, since that's a subset of YAML) in Sass files parsed by `sass`.
+This package makes the `@import`/`@use` rules in Sass work with YAML files through custom importers for the [current](https://sass-lang.com/documentation/js-api/interfaces/importer/) as well as the [legacy](https://sass-lang.com/documentation/js-api/types/legacyimporter/) Sass JavaScript API.
 
-This is a fork of the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) repository, adjusted for usage with YAML.
+Since YAML is a superset of JSON, this importer can also be used to import JSON files.
 
-## Setup
-
-### [sass](https://github.com/sass/sass)
-
-This module hooks into [sass' importer api](https://sass-lang.com/documentation/js-api#importer).
-
-```javascript
-const sass = require('sass');
-const yamlImporter = require('node-sass-yaml-importer');
-
-// Example 1
-sass.render({
-  file: scss_filename,
-  importer: yamlImporter,
-  // ...options
-}, (err, result) => { /*...*/ });
-
-// Example 2
-const result = sass.renderSync({
-  data: scss_content
-  importer: [yamlImporter, someOtherImporter]
-  // ...options
-});
-```
-
-### Webpack / [sass-loader](https://github.com/jtangelder/sass-loader)
-
-#### Webpack v1
-
-```javascript
-import yamlImporter from 'node-sass-yaml-importer'
-
-// Webpack config
-export default {
-  module: {
-    loaders: [
-      {
-        test: /\.scss$/,
-        loaders: ['style', 'css', 'sass']
-      }
-    ]
-  },
-  // Apply the YAML importer via sass-loader's options.
-  sassLoader: {
-    importer: yamlImporter
-  }
-}
-```
-
-#### Webpack v2 and upwards
-
-```javascript
-import yamlImporter from 'node-sass-yaml-importer';
-
-// Webpack config
-export default {
-  module: {
-    rules: [
-      test: /\.scss$/,
-      use: [
-        'style-loader',
-        {
-          loader: 'css-loader',
-          options: {
-            importLoaders: 1
-          },
-        },
-        {
-          loader: 'sass-loader',
-          // Apply the YAML importer via sass-loader's options.
-          options: {
-            importer: yamlImporter,
-          },
-        },
-      ],
-    ],
-  },
-};
-```
-
-## Usage
+## Usage in SCSS Code
 
 Given the following `colors.yml` file:
 
@@ -130,11 +50,11 @@ To achieve the same behavior as with `@import`, you can [change the namespace to
 }
 ```
 
-### Importing strings
+### Importing Strings
 
 As YAML values don't map directly to Sass's data types, a common source of confusion is how to handle strings. While [Sass allows strings to be both quoted and unqouted](https://sass-lang.com/documentation/values/strings#unquoted), strings containing spaces, commas and/or other special characters have to be wrapped in quotes.
 
-Since version 7 of this package, the importer will automatically add quotes around all strings that are not valid unquoted strings or hex colors (and that are not already quoted, of course):
+The importer will automatically add quotes around all strings that are not valid unquoted strings or hex colors (and that are not already quoted, of course):
 
 <!-- prettier-ignore -->
 Input | Output | Explanation
@@ -142,11 +62,11 @@ Input | Output | Explanation
 `color: red`<br>`color: "red"`<br>↑ Equivalent YAML expressions | `$color: red;` | Valid unquoted string
 `color: "#f00"` | `$color: #f00;` | Valid hex color
 `color: "'red'"` | `$color: "red";` | Explicitly quoted string
-`color: "really red"` | `$color: "really red";` | Valid unquoted string
+`color: "really red"` | `$color: "really red";` | Invalid (multi-word) unquoted string
 
-### Importing objects
+### Map Keys
 
-Since version 6 of this package, _all_ map keys are quoted:
+Map keys are always quoted by the importer:
 
 ```yaml
 # colors.yml
@@ -158,7 +78,7 @@ colors:
 @use 'colors.yml' as *;
 
 :root {
-  // This no longer works:
+  // This does not work:
   color: map-get($colors, red);
 
   // Do this instead:
@@ -166,6 +86,88 @@ colors:
 }
 ```
 
+### Resolving Paths
+
+The importer tries to stick to the same path resolution logic as Sass itself. This means that it tries to interpret import requests as (relative) file system paths:
+
+```scss
+// In /path/to/some-file.scss
+@use 'config/colors.yml'; // Resolves to /path/to/config/colors.yml
+```
+
+If no according file can be found, further resolving depends on the kind of importer you're using:
+
+- When using the [`sass-loader` factories](#sass-loader-for-webpackrspack), the importer will try to resolve paths the same way webpack does. This means that you can use npm package names or webpack aliases to reference your YAML files.
+- When using the Sass compiler directly [with the legacy Sass JavaScript API](#sass-with-legacy-javascript-api), the importer will try to find the requested file inside the configured [`includedPaths`](https://sass-lang.com/documentation/js-api/interfaces/legacystringoptions/#includePaths).
+- In contrast, using the Sass compiler directly [with the modern Sass JavaScript API](#sass-with-modern-javascript-api) will _not_ consider the [`loadPaths`](https://sass-lang.com/documentation/js-api/interfaces/options/#loadPaths) option, as the modern API purposefully does not share Sass options with importers.
+
+## Setting up the Importer
+
+> [!NOTE]
+>
+> Some notes on the code samples below:
+>
+> 1. The examples make use of ES modules, but the importer will work in CommonJS environments just fine.
+> 2. Examples are using the [`sass`](https://npmjs.com/package/sass) package. However, the same code should work equally well with [`sass-embedded`](https://npmjs.com/package/sass-embedded). The legacy API examples should even work with [`node-sass`](https://www.npmjs.com/package/node-sass) (although this is no longer tested since Node Sass has been deprecated).
+
+### Sass with Modern JavaScript API
+
+```js
+import * as sass from 'sass'
+import { yamlImporter } from 'node-sass-yaml-importer'
+
+sass.compile('some-file.scss', {
+  importers: [yamlImporter],
+})
+```
+
+### Sass with Legacy JavaScript API
+
+```js
+import * as sass from 'sass'
+import { legacyYamlImporter } from 'node-sass-yaml-importer'
+
+sass.renderSync({
+  file: 'some-file.scss',
+  importer: [legacyYamlImporter],
+})
+```
+
+### [sass-loader](https://github.com/webpack-contrib/sass-loader) (for [webpack](https://webpack.js.org/)/[rspack](https://rspack.dev/))
+
+This package exposes the `createSassLoaderYamlImporter`/`createSassLoaderLegacyYamlImporter` factory functions to create importers that work well with `sass-loader`.
+
+While you could just use the importers directly (as documented in the previous section), the `sass-loader`-specific factory functions enable you to use webpack's request resolution (like pointing to npm packages or aliases) to reference your YAML files. Learn more about this in the [Resolving Paths](#resolving-paths) section.
+
+To use the importer factory with `sass-loader`, you need to pass a function to its `sassOptions` option to get access to the `loaderContext` object. This object then needs to be passed to the importer factory:
+
+```js
+// webpack.config.js / rspack.config.js
+
+import { createSassLoaderYamlImporter } from 'node-sass-yaml-importer'
+
+export default {
+  // ...
+  {
+    loader: 'sass-loader',
+    options: {
+      sassOptions: loaderContext => ({
+        return {
+          importers: [
+            createSassLoaderYamlImporter(loaderContext)
+          ],
+        }
+      },
+    },
+  },
+  // ...
+}
+```
+
+> [!NOTE]
+>
+> While the code above uses the importer for the modern Sass JavaScript API, you can also create a legacy importer through the `createSassLoaderLegacyYamlImporter` factory instead. In that case, make sure to also adjust the [`api`](https://github.com/webpack-contrib/sass-loader#api) option accordingly, if needed.
+
 ## Credit
 
-The initial implementation of this importer was based on the [node-sass-json-importer](https://github.com/Updater/node-sass-json-importer) package.
+The initial implementation of this importer was based on the [node-sass-json-importer](https://github.com/pmowrer/node-sass-json-importer) package.

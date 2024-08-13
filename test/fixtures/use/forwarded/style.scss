@@ -1,0 +1,5 @@
+@use 'forward';
+
+body {
+  color: forward.$vars-color-red;
+}
