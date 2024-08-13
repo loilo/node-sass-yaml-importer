@@ -1,6 +1,6 @@
 {
   "name": "node-sass-yaml-importer",
-  "version": "7.0.0",
+  "version": "8.0.0",
   "description": "Allows importing YAML in sass files parsed by node-sass.",
   "type": "module",
   "keywords": [
