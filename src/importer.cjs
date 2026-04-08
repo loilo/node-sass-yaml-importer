@@ -2,9 +2,9 @@
  * @import * as Sass from 'sass'
  */
 
-const path = require('path')
-const fs = require('fs')
-const nodeUrl = require('url')
+const path = require('node:path')
+const fs = require('node:fs')
+const nodeUrl = require('node:url')
 const yaml = require('js-yaml')
 
 const { isPromiseLike, isPlainObject } = require('./util/helpers.cjs')
