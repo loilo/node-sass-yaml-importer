@@ -29,7 +29,7 @@
     "test": "run-s test:types test:vitest"
   },
   "dependencies": {
-    "js-yaml": "^4.1.1"
+    "js-yaml": "^5.0.0"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",
